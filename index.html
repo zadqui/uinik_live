@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UINIK LIVE</title>
+<meta name="description" content="UINIK LIVE: herramientas para crear contenido en vivo. Extensión de UINIK.">
+<link rel="icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0e0f14; --paper:#ffffff; --soft:#f6f4f3; --line:#e7e3e1; --muted:#6b6670;
+    --coral:#ff1f4b; --orange:#ff8a00; --violet:#7a1cff;
+    --grad:linear-gradient(135deg,var(--coral),var(--orange));
+  }
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth;scroll-padding-top:72px}
+  body{background:var(--paper);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.5}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+  /* barra */
+  nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none;margin-right:auto}
+  .brand img{height:34px}
+  .brand span{color:var(--coral)}
+  nav a.link{text-decoration:none;font-weight:600;color:var(--muted)}
+  nav a.link:hover{color:var(--ink)}
+
+  /* hero */
+  .hero{padding:72px 0 88px}
+  .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+  h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
+  .hero p{margin:20px 0 32px;font-size:19px;color:var(--muted);max-width:30em}
+  .btn{display:inline-block;border:0;border-radius:12px;padding:13px 24px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;color:#fff;background:var(--ink)}
+  .btn:hover{background:#25262e}
+  .btn.grad{background:var(--grad)} .btn.grad:hover{filter:brightness(1.06)}
+  .btn.ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)} .btn.ghost:hover{background:var(--soft)}
+  .hero img{width:100%;max-width:380px;justify-self:center}
+
+  /* secciones */
+  section{padding:72px 0;border-top:1px solid var(--line)}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;font-weight:800}
+  .lead{color:var(--muted);margin:8px 0 36px;font-size:18px}
+
+  /* herramientas */
+  .tools{list-style:none;padding:0}
+  .tools li{display:grid;grid-template-columns:1fr auto;gap:4px 24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+  .tools li:first-child{border-top:1px solid var(--line)}
+  .tools h3{font-size:20px;font-weight:600}
+  .tools p{color:var(--muted);grid-column:1}
+  .tag{grid-row:1 / span 2;grid-column:2;font-size:14px;font-weight:600;padding:5px 14px;border-radius:99px;background:var(--soft);color:var(--muted);text-decoration:none;white-space:nowrap}
+  a.tag.on{background:var(--grad);color:#fff}
+
+  /* tiktok */
+  .panel{border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;padding:16px;background:var(--soft);border-bottom:1.5px solid var(--line)}
+  .bar input[type=text]{flex:1;min-width:180px}
+  input[type=text],select{background:var(--paper);border:1.5px solid var(--line);color:var(--ink);padding:11px 14px;border-radius:12px;font:inherit;max-width:100%}
+  .cfg{display:none;flex-wrap:wrap;gap:14px 20px;padding:14px 16px;border-bottom:1.5px solid var(--line);align-items:center}
+  .cfg.open{display:flex}
+  label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+  .cfg input[type=text]{min-width:260px}
+  #status{padding:10px 16px;font-size:14px;color:var(--muted);border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:8px}
+  #status::before{content:"";width:9px;height:9px;border-radius:50%;background:#c9c4c7}
+  #status.ok{color:var(--ink)} #status.ok::before{background:var(--grad);animation:pulse 1.6s infinite}
+  #status.err{color:var(--coral)} #status.err::before{background:var(--coral)}
+  #feed{height:460px;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:10px}
+  .empty{margin:auto;text-align:center;color:var(--muted);max-width:340px}
+  .msg{display:flex;gap:10px;align-items:flex-start;max-width:640px;animation:in .25s ease-out}
+  .msg img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--line);flex:none}
+  .bubble{background:var(--soft);border:1.5px solid transparent;border-radius:4px 16px 16px 16px;padding:8px 14px;min-width:0;transition:border-color .2s,background .2s}
+  .msg.speaking .bubble{border-color:var(--coral);background:#fff3f5}
+  .name{font-weight:800;font-size:14px;color:var(--coral)}
+  .text{font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+  .event{align-self:flex-start;border-left:4px solid var(--orange);padding:3px 12px;color:var(--muted);font-size:15px}
+  .event b{color:var(--ink)}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.msg,#status.ok::before{animation:none}html{scroll-behavior:auto}}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:14px}
+  @media (max-width:760px){
+    .hero{padding:40px 0 56px}.hero .wrap{grid-template-columns:1fr}.hero img{max-width:220px;order:-1;justify-self:start}
+    .tools li{grid-template-columns:1fr}.tag{grid-row:auto;grid-column:1;justify-self:start;margin-top:8px}
+    nav .wrap{gap:18px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="icon.png" alt="">UINIK <span>LIVE</span></a>
+    <a class="link" href="#herramientas">Herramientas</a>
+    <a class="link" href="#tiktok">TikTok</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <h1>Herramientas para tus lives.</h1>
+      <p>UINIK LIVE es la extensión de UINIK para crear contenido en vivo, simple y sin instalar nada.</p>
+      <a class="btn grad" href="#tiktok">Abrir TikTok</a>
+      <a class="btn ghost" href="#herramientas">Ver herramientas</a>
+    </div>
+    <img src="logo.png" alt="Logo de UINIK LIVE">
+  </div>
+</header>
+
+<section id="herramientas">
+  <div class="wrap">
+    <h2>Herramientas</h2>
+    <p class="lead">Lo que puedes usar hoy y lo que viene.</p>
+    <ul class="tools">
+      <li>
+        <h3>Comentarios con voz</h3>
+        <p>Lee los comentarios de tu live de TikTok en pantalla y en voz alta.</p>
+        <a class="tag on" href="#tiktok">Disponible</a>
+      </li>
+      <li>
+        <h3>Alertas de regalos</h3>
+        <p>Avisos visuales y sonoros cuando tu comunidad te envíe un regalo.</p>
+        <span class="tag">Próximamente</span>
+      </li>
+      <li>
+        <h3>Metas y contadores</h3>
+        <p>Barras de progreso para seguidores, likes y regalos durante el live.</p>
+        <span class="tag">Próximamente</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="tiktok">
+  <div class="wrap">
+    <h2>TikTok</h2>
+    <p class="lead">Conecta tu live y deja que UINIK LIVE lea los comentarios por ti.</p>
+
+    <div class="panel">
+      <div class="bar">
+        <input type="text" id="u" placeholder="@tu_usuario" autocomplete="off" aria-label="Usuario de TikTok">
+        <button class="btn grad" id="go">Conectar y activar voz</button>
+        <button class="btn ghost" id="cfgBtn" aria-expanded="false" aria-controls="cfg">Ajustes</button>
+      </div>
+      <div class="cfg" id="cfg">
+        <label><input type="checkbox" id="vOn" checked> Leer en voz alta</label>
+        <label>Voz <select id="vSel"></select></label>
+        <label>Velocidad <input type="range" id="vRate" min="0.7" max="1.6" step="0.1" value="1.1"></label>
+        <label><input type="checkbox" id="vName" checked> Decir el nombre</label>
+        <label><input type="checkbox" id="vGift" checked> Anunciar regalos</label>
+        <label>Servidor <input type="text" id="srv" placeholder="https://tu-app.onrender.com"></label>
+        <button class="btn ghost" id="test">Probar voz</button>
+      </div>
+      <div id="status" role="status">Sin conexión</div>
+      <div id="feed"><p class="empty" id="empty">Escribe tu usuario con el live activo y toca Conectar. Los comentarios aparecerán aquí.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">UINIK LIVE, una extensión de UINIK para la creación de contenido.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const feed = $('feed'), MAX = 100, MAX_QUEUE = 6;
+const store = {
+  get(k, d){ try { return localStorage.getItem(k) ?? d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+};
+const params = new URLSearchParams(location.search);
+
+// ---------- Ajustes ----------
+const onGithub = location.hostname.endsWith('github.io');
+$('u').value = params.get('user') || store.get('u', '');
+$('srv').value = params.get('server') || store.get('srv', onGithub || location.protocol === 'file:' ? '' : location.origin);
+$('vRate').value = store.get('rate', '1.1');
+$('cfgBtn').onclick = () => {
+  const open = $('cfg').classList.toggle('open');
+  $('cfgBtn').setAttribute('aria-expanded', open);
+};
+if (!$('srv').value) $('cfg').classList.add('open');
+
+// ---------- Voz (Web Speech API del navegador) ----------
+let voices = [];
+function loadVoices(){
+  voices = speechSynthesis.getVoices();
+  const es = voices.filter(v => v.lang.toLowerCase().startsWith('es'));
+  const list = es.length ? es : voices;
+  const saved = store.get('voice', '');
+  $('vSel').innerHTML = list.map(v => `<option value="${v.name}" ${v.name===saved?'selected':''}>${v.name} (${v.lang})</option>`).join('');
+}
+speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+$('vSel').onchange = () => store.set('voice', $('vSel').value);
+$('vRate').onchange = () => store.set('rate', $('vRate').value);
+
+function clean(t){
+  return String(t).replace(/https?:\/\/\S+/g, 'enlace')
+    .replace(/(.)\1{4,}/g, '$1$1$1')
+    .replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}]/gu, '')
+    .trim().slice(0, 160);
+}
+let pending = 0;
+function speak(text, el){
+  if (!$('vOn').checked || !text) return;
+  if (pending >= MAX_QUEUE) return;
+  const u = new SpeechSynthesisUtterance(text);
+  const v = voices.find(x => x.name === $('vSel').value);
+  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'es-MX';
+  u.rate = parseFloat($('vRate').value);
+  pending++;
+  u.onstart = () => el && el.classList.add('speaking');
+  u.onend = u.onerror = () => { pending = Math.max(0, pending - 1); el && el.classList.remove('speaking'); };
+  speechSynthesis.speak(u);
+}
+$('test').onclick = () => speak('Hola, así sonaré leyendo tus comentarios en UINIK LIVE', null);
+
+// ---------- Feed ----------
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function add(cls, html){
+  const e = $('empty'); if (e) e.remove();
+  const d = document.createElement('div'); d.className = cls; d.innerHTML = html;
+  feed.appendChild(d);
+  while (feed.children.length > MAX) feed.firstChild.remove();
+  feed.scrollTop = feed.scrollHeight;
+  return d;
+}
+
+// ---------- Conexión ----------
+let socket = null;
+function setStatus(msg, ok){ const s = $('status'); s.textContent = msg; s.className = ok ? 'ok' : 'err'; }
+
+function connect(){
+  const user = $('u').value.trim(), srv = $('srv').value.trim().replace(/\/$/, '');
+  if (!user) return setStatus('Escribe tu usuario de TikTok.', false);
+  if (!srv) { $('cfg').classList.add('open'); return setStatus('Falta la dirección del servidor en Ajustes.', false); }
+  store.set('u', user); store.set('srv', srv);
+  speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+
+  if (socket) socket.disconnect();
+  setStatus('Conectando…', true);
+  socket = io(srv, { transports: ['websocket', 'polling'] });
+  socket.on('connect', () => socket.emit('connect-live', user));
+  socket.on('connect_error', () => setStatus('No llego al servidor. Revisa la dirección en Ajustes.', false));
+  socket.on('status', (s) => setStatus(s.msg, s.ok));
+
+  socket.on('chat', (c) => {
+    const el = add('msg', `<img src="${esc(c.avatar)}" alt=""><div class="bubble"><div class="name">${esc(c.name)}</div><div class="text">${esc(c.text)}</div></div>`);
+    const t = clean(c.text);
+    speak($('vName').checked && t ? `${c.name} dice: ${t}` : t, el);
+  });
+  socket.on('gift', (g) => {
+    add('event', `<b>${esc(g.name)}</b> envió ${esc(g.gift)} x${esc(g.count)}`);
+    if ($('vGift').checked) speak(`${g.name} envió ${g.gift}`, null);
+  });
+  socket.on('follow', (f) => add('event', `<b>${esc(f.name)}</b> empezó a seguirte`));
+}
+$('go').onclick = connect;
+$('u').addEventListener('keydown', (e) => { if (e.key === 'Enter') connect(); });
+</script>
+</body>
+</html>
