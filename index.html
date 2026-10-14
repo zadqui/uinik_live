@@ -8,61 +8,71 @@
 <link rel="icon" href="icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#0e0f14; --paper:#ffffff; --soft:#f6f4f3; --line:#e7e3e1; --muted:#6b6670;
-    --coral:#ff1f4b; --orange:#ff8a00; --violet:#7a1cff;
-    --grad:linear-gradient(135deg,var(--coral),var(--orange));
-  }
+  :root{--ink:#0e0f14;--paper:#fff;--soft:#faf6f7;--line:#eee7ea;--muted:#6b6670;--coral:#ff1f4b;--orange:#ff8a00;--mag:#e0187c;--violet:#7a1cff;
+    --grad:linear-gradient(135deg,#ff1f6b,#ff8a00);--shadow:0 10px 30px rgba(255,31,75,.08),0 2px 6px rgba(14,15,20,.05)}
   *{box-sizing:border-box;margin:0}
-  html{scroll-behavior:smooth;scroll-padding-top:72px}
-  body{background:var(--paper);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.5}
-  a{color:inherit}
-  :focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:6px}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--ink);line-height:1.5;
+    background:radial-gradient(60% 50% at 85% 8%,rgba(255,120,160,.22),transparent 70%),radial-gradient(40% 40% at 100% 30%,rgba(255,170,90,.18),transparent 70%),#fff}
+  a{color:inherit} :focus-visible{outline:3px solid var(--violet);outline-offset:3px;border-radius:8px}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  svg.i{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  /* barra */
-  nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none;margin-right:auto}
-  .brand img{height:34px}
-  .brand span{color:var(--coral)}
-  nav a.link{text-decoration:none;font-weight:600;color:var(--muted)}
-  nav a.link:hover{color:var(--ink)}
+  nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:32px;height:68px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;text-decoration:none;margin-right:auto}
+  .brand img{height:38px} .brand span{color:var(--coral)}
+  nav a.link{text-decoration:none;font-weight:600;color:var(--muted)} nav a.link:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:14px 26px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;color:#fff;background:var(--ink)}
+  .btn.grad{background:var(--grad);box-shadow:0 8px 20px rgba(255,31,75,.28)} .btn.grad:hover{filter:brightness(1.07)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)} .btn.ghost:hover{background:var(--soft)}
+  nav .btn{padding:11px 20px}
 
-  /* hero */
-  .hero{padding:72px 0 88px}
-  .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
-  h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
-  .hero p{margin:20px 0 32px;font-size:19px;color:var(--muted);max-width:30em}
-  .btn{display:inline-block;border:0;border-radius:12px;padding:13px 24px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;color:#fff;background:var(--ink)}
-  .btn:hover{background:#25262e}
-  .btn.grad{background:var(--grad)} .btn.grad:hover{filter:brightness(1.06)}
-  .btn.ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)} .btn.ghost:hover{background:var(--soft)}
-  .hero img{width:100%;max-width:380px;justify-self:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:#fde9f1;color:var(--mag);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border-radius:99px}
+  .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mag)}
 
-  /* secciones */
-  section{padding:72px 0;border-top:1px solid var(--line)}
-  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;font-weight:800}
-  .lead{color:var(--muted);margin:8px 0 36px;font-size:18px}
+  .hero{padding:64px 0 40px}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:center}
+  h1{font-size:clamp(42px,6vw,72px);line-height:1;letter-spacing:-.035em;font-weight:800;margin:20px 0}
+  h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{font-size:18px;color:var(--muted);max-width:30em;margin-bottom:28px} .hero p b{color:var(--ink)}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+  .checks{display:flex;flex-wrap:wrap;gap:12px 22px;list-style:none;padding:0;color:var(--muted);font-size:14px}
+  .checks li{display:flex;align-items:center;gap:8px}
+  .checks i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fde9f1;color:var(--coral)} .checks .i{width:13px;height:13px;stroke-width:3}
+  .hero img{width:100%;height:auto;display:block}
 
-  /* herramientas */
-  .tools{list-style:none;padding:0}
-  .tools li{display:grid;grid-template-columns:1fr auto;gap:4px 24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
-  .tools li:first-child{border-top:1px solid var(--line)}
-  .tools h3{font-size:20px;font-weight:600}
-  .tools p{color:var(--muted);grid-column:1}
-  .tag{grid-row:1 / span 2;grid-column:2;font-size:14px;font-weight:600;padding:5px 14px;border-radius:99px;background:var(--soft);color:var(--muted);text-decoration:none;white-space:nowrap}
-  a.tag.on{background:var(--grad);color:#fff}
+  section{padding:72px 0} .center{text-align:center}
+  h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;font-weight:800;margin-top:14px}
+  .lead{color:var(--muted);margin:8px 0 40px;font-size:18px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:left}
+  .card{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;text-decoration:none}
+  .card.on{border-color:#ffb3a0}
+  .ico{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;background:#f3ecff;color:var(--violet);margin-bottom:10px} .ico .i{width:24px;height:24px}
+  .card.on .ico{background:var(--grad);color:#fff}
+  .card:nth-child(3) .ico{background:#ffeee3;color:var(--orange)} .card:nth-child(4) .ico{background:#fde9f1;color:var(--mag)}
+  .badge{position:absolute;top:22px;right:22px;font-size:13px;font-weight:600;padding:4px 12px;border-radius:99px;background:#f3f0f1;color:var(--muted)}
+  .card.on .badge{background:#e6f7ea;color:#1f8a43}
+  .card h3{font-size:20px;font-weight:800;letter-spacing:-.01em} .card p{color:var(--muted);font-size:15px}
+  .go{margin-top:auto;align-self:flex-end;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#f3f0f1;color:var(--muted)}
+  .card.on .go{background:var(--grad);color:#fff}
 
-  /* tiktok */
-  .panel{border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
+  .how{background:linear-gradient(120deg,#fff1f5,#fff4ea);border-radius:28px;padding:40px;display:grid;grid-template-columns:.9fr 1.3fr;gap:32px;align-items:center}
+  .how h2{margin-top:12px} .how p{color:var(--muted);margin-top:10px}
+  .flow{display:flex;align-items:center;gap:14px}
+  .step{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:var(--shadow);font-size:14px;flex:1;display:flex;gap:10px;align-items:center}
+  .step b{display:block;font-size:14px} .step small{color:var(--muted)}
+  .step .ico{width:40px;height:40px;margin:0;border-radius:50%;background:#efe9ff;color:var(--violet)} .step .ico .i{width:20px;height:20px}
+  .tt{width:36px;height:36px;border-radius:10px;background:#0e0f14;color:#fff;display:grid;place-items:center;flex:none} .tt svg{width:20px;height:20px;fill:#fff}
+  .arrow{color:var(--coral)}
+
+  .panel{border:1.5px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;box-shadow:var(--shadow);text-align:left}
   .bar{display:flex;flex-wrap:wrap;gap:10px;padding:16px;background:var(--soft);border-bottom:1.5px solid var(--line)}
   .bar input[type=text]{flex:1;min-width:180px}
-  input[type=text],select{background:var(--paper);border:1.5px solid var(--line);color:var(--ink);padding:11px 14px;border-radius:12px;font:inherit;max-width:100%}
+  input[type=text],select{background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:12px 14px;border-radius:12px;font:inherit;max-width:100%}
   .cfg{display:none;flex-wrap:wrap;gap:14px 20px;padding:14px 16px;border-bottom:1.5px solid var(--line);align-items:center}
-  .cfg.open{display:flex}
+  .cfg.open{display:flex} .cfg input[type=text]{min-width:260px}
   label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
-  .cfg input[type=text]{min-width:260px}
   #status{padding:10px 16px;font-size:14px;color:var(--muted);border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:8px}
   #status::before{content:"";width:9px;height:9px;border-radius:50%;background:#c9c4c7}
   #status.ok{color:var(--ink)} #status.ok::before{background:var(--grad);animation:pulse 1.6s infinite}
@@ -73,97 +83,120 @@
   .msg img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--line);flex:none}
   .bubble{background:var(--soft);border:1.5px solid transparent;border-radius:4px 16px 16px 16px;padding:8px 14px;min-width:0;transition:border-color .2s,background .2s}
   .msg.speaking .bubble{border-color:var(--coral);background:#fff3f5}
-  .name{font-weight:800;font-size:14px;color:var(--coral)}
-  .text{font-size:17px;line-height:1.3;overflow-wrap:anywhere}
-  .event{align-self:flex-start;border-left:4px solid var(--orange);padding:3px 12px;color:var(--muted);font-size:15px}
-  .event b{color:var(--ink)}
-  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @keyframes pulse{50%{opacity:.35}}
+  .name{font-weight:800;font-size:14px;color:var(--coral)} .text{font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+  .event{align-self:flex-start;border-left:4px solid var(--orange);padding:3px 12px;color:var(--muted);font-size:15px} .event b{color:var(--ink)}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}} @keyframes pulse{50%{opacity:.35}}
   @media (prefers-reduced-motion:reduce){.msg,#status.ok::before{animation:none}html{scroll-behavior:auto}}
-
+  .stage{position:relative}
+  #alerts{position:absolute;top:12px;left:12px;right:12px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+  .alert{display:flex;align-items:center;gap:14px;background:var(--grad);color:#fff;border-radius:18px;padding:12px 20px;max-width:100%;box-shadow:0 12px 30px rgba(255,31,75,.35);animation:drop .35s cubic-bezier(.2,.9,.3,1.2)}
+  .alert img,.aico{width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.25);object-fit:contain;display:grid;place-items:center;font-size:26px;flex:none}
+  .alert b{display:block;font-size:17px;line-height:1.2;overflow-wrap:anywhere} .alert span{font-size:14px;opacity:.95}
+  .alert em{font-style:normal;font-weight:800;font-size:24px;margin-left:4px}
+  .alert.out{opacity:0;transform:translateY(-10px);transition:.3s}
+  @keyframes drop{from{opacity:0;transform:translateY(-16px) scale(.96)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.alert{animation:none}}
   footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:14px}
-  @media (max-width:760px){
-    .hero{padding:40px 0 56px}.hero .wrap{grid-template-columns:1fr}.hero img{max-width:220px;order:-1;justify-self:start}
-    .tools li{grid-template-columns:1fr}.tag{grid-row:auto;grid-column:1;justify-self:start;margin-top:8px}
-    nav .wrap{gap:18px}
-  }
+
+  @media (max-width:980px){.hero .wrap,.how{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.flow{flex-direction:column;align-items:stretch}.arrow{transform:rotate(90deg);align-self:center}}
+  @media (max-width:640px){nav .link{display:none}.cards{grid-template-columns:1fr}.how{padding:28px 20px}.hero{padding-top:36px}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+  <symbol id="gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8c-3 0-5-1-5-3a2 2 0 0 1 4 0c0 1 1 3 1 3zM12 8c3 0 5-1 5-3a2 2 0 0 0-4 0c0 1-1 3-1 3z"/></symbol>
+  <symbol id="goal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="mon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 21h8M12 16v5"/></symbol>
+  <symbol id="spk" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+  <symbol id="tk" viewBox="0 0 24 24"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 5 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.2-1.6z"/></symbol>
+</svg>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="#top"><img src="icon.png" alt="">UINIK <span>LIVE</span></a>
-    <a class="link" href="#herramientas">Herramientas</a>
-    <a class="link" href="#tiktok">TikTok</a>
-  </div>
-</nav>
+<nav><div class="wrap">
+  <a class="brand" href="#top"><img src="icon.png" alt="">UINIK <span>LIVE</span></a>
+  <a class="link" href="#herramientas">Herramientas</a>
+  <a class="link" href="#como">Cómo funciona</a>
+  <a class="link" href="#tiktok">TikTok</a>
+  <a class="btn grad" href="#tiktok">Abrir TikTok <svg class="i"><use href="#arr"/></svg></a>
+</div></nav>
 
-<header class="hero" id="top">
-  <div class="wrap">
-    <div>
-      <h1>Herramientas para tus lives.</h1>
-      <p>UINIK LIVE es la extensión de UINIK para crear contenido en vivo, simple y sin instalar nada.</p>
-      <a class="btn grad" href="#tiktok">Abrir TikTok</a>
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <span class="pill">Para creadores de TikTok</span>
+    <h1>Haz que tus directos cobren <em>vida.</em></h1>
+    <p><b>UINIK LIVE es la extensión de UINIK</b> para crear contenido en vivo, simple y <b>sin instalar nada</b>. Lleva tus streams de TikTok al siguiente nivel con herramientas interactivas, alertas y mucho más.</p>
+    <div class="cta">
+      <a class="btn grad" href="#tiktok"><svg class="i" style="fill:#fff;stroke:none"><use href="#tk"/></svg>Abrir TikTok <svg class="i"><use href="#arr"/></svg></a>
       <a class="btn ghost" href="#herramientas">Ver herramientas</a>
     </div>
-    <img src="logo.png" alt="Logo de UINIK LIVE">
-  </div>
-</header>
-
-<section id="herramientas">
-  <div class="wrap">
-    <h2>Herramientas</h2>
-    <p class="lead">Lo que puedes usar hoy y lo que viene.</p>
-    <ul class="tools">
-      <li>
-        <h3>Comentarios con voz</h3>
-        <p>Lee los comentarios de tu live de TikTok en pantalla y en voz alta.</p>
-        <a class="tag on" href="#tiktok">Disponible</a>
-      </li>
-      <li>
-        <h3>Alertas de regalos</h3>
-        <p>Avisos visuales y sonoros cuando tu comunidad te envíe un regalo.</p>
-        <span class="tag">Próximamente</span>
-      </li>
-      <li>
-        <h3>Metas y contadores</h3>
-        <p>Barras de progreso para seguidores, likes y regalos durante el live.</p>
-        <span class="tag">Próximamente</span>
-      </li>
+    <ul class="checks">
+      <li><i><svg class="i"><use href="#ok"/></svg></i>Sin instalar nada</li>
+      <li><i><svg class="i"><use href="#ok"/></svg></i>Fácil de usar</li>
+      <li><i><svg class="i"><use href="#ok"/></svg></i>Gratis para empezar</li>
     </ul>
   </div>
-</section>
+  <img src="hero.webp" alt="Panel de UINIK LIVE con comentarios en tiempo real, voz y herramientas">
+</div></header>
 
-<section id="tiktok">
-  <div class="wrap">
-    <h2>TikTok</h2>
-    <p class="lead">Conecta tu live y deja que UINIK LIVE lea los comentarios por ti.</p>
-
-    <div class="panel">
-      <div class="bar">
-        <input type="text" id="u" placeholder="@tu_usuario" autocomplete="off" aria-label="Usuario de TikTok">
-        <button class="btn grad" id="go">Conectar y activar voz</button>
-        <button class="btn ghost" id="cfgBtn" aria-expanded="false" aria-controls="cfg">Ajustes</button>
-      </div>
-      <div class="cfg" id="cfg">
-        <label><input type="checkbox" id="vOn" checked> Leer en voz alta</label>
-        <label>Voz <select id="vSel"></select></label>
-        <label>Velocidad <input type="range" id="vRate" min="0.7" max="1.6" step="0.1" value="1.1"></label>
-        <label><input type="checkbox" id="vName" checked> Decir el nombre</label>
-        <label><input type="checkbox" id="vGift" checked> Anunciar regalos</label>
-        <label>Servidor <input type="text" id="srv" placeholder="https://tu-app.onrender.com"></label>
-        <button class="btn ghost" id="test">Probar voz</button>
-      </div>
-      <div id="status" role="status">Sin conexión</div>
-      <div id="feed"><p class="empty" id="empty">Escribe tu usuario con el live activo y toca Conectar. Los comentarios aparecerán aquí.</p></div>
-    </div>
+<section id="herramientas" class="center"><div class="wrap">
+  <span class="pill">Herramientas</span>
+  <h2>Todo lo que necesitas para tus directos.</h2>
+  <p class="lead">Herramientas simples, poderosas y diseñadas para creadores de TikTok.</p>
+  <div class="cards">
+    <a class="card on" href="#tiktok"><div class="ico"><svg class="i"><use href="#mic"/></svg></div><span class="badge">Disponible</span>
+      <h3>Comentarios con voz</h3><p>Lee los comentarios de tu live de TikTok en pantalla y en voz alta.</p><span class="go"><svg class="i"><use href="#arr"/></svg></span></a>
+    <a class="card on" href="#tiktok"><div class="ico"><svg class="i"><use href="#gift"/></svg></div><span class="badge">Disponible</span>
+      <h3>Alertas de regalos</h3><p>Avisos visuales y sonoros cuando tu comunidad te envíe un regalo.</p><span class="go"><svg class="i"><use href="#arr"/></svg></span></a>
+    <div class="card"><div class="ico"><svg class="i"><use href="#goal"/></svg></div><span class="badge">Próximamente</span>
+      <h3>Metas y contadores</h3><p>Muestra tus metas, seguidores y contadores en tiempo real.</p><span class="go"><svg class="i"><use href="#arr"/></svg></span></div>
+    <div class="card"><div class="ico"><svg class="i"><use href="#mon"/></svg></div><span class="badge">Próximamente</span>
+      <h3>Overlays para OBS</h3><p>Widgets y overlays personalizables para llevar tu live a otro nivel.</p><span class="go"><svg class="i"><use href="#arr"/></svg></span></div>
   </div>
-</section>
+</div></section>
 
-<footer>
-  <div class="wrap">UINIK LIVE, una extensión de UINIK para la creación de contenido.</div>
-</footer>
+<section id="como" style="padding-top:0"><div class="wrap"><div class="how">
+  <div><span class="pill">Así funciona</span><h2>De un comentario a una voz en segundos.</h2>
+    <p>Los comentarios de tu comunidad se convierten en voz en tiempo real, haciendo tus directos más interactivos y divertidos.</p></div>
+  <div class="flow">
+    <div class="step"><span class="tt"><svg><use href="#tk"/></svg></span><div><b>Luna_23</b>Tienes una voz increíble<br><small>Hace un momento</small></div></div>
+    <svg class="i arrow"><use href="#arr"/></svg>
+    <div class="step"><img src="icon.png" alt="" style="height:36px"><div><b>UINIK <span style="color:var(--coral)">LIVE</span></b>Convierte el comentario en voz al instante</div></div>
+    <svg class="i arrow"><use href="#arr"/></svg>
+    <div class="step"><span class="ico"><svg class="i"><use href="#spk"/></svg></span><div><b>“Tienes una voz increíble”</b></div></div>
+  </div>
+</div></div></section>
+
+<section id="tiktok" class="center" style="padding-top:24px"><div class="wrap">
+  <span class="pill">TikTok</span>
+  <h2>Conecta tu live.</h2>
+  <p class="lead">Escribe tu usuario y deja que UINIK LIVE lea los comentarios por ti.</p>
+  <div class="panel">
+    <div class="bar">
+      <input type="text" id="u" placeholder="@tu_usuario" autocomplete="off" aria-label="Usuario de TikTok">
+      <button class="btn grad" id="go">Conectar y activar voz</button>
+      <button class="btn ghost" id="cfgBtn" aria-expanded="false" aria-controls="cfg">Ajustes</button>
+    </div>
+    <div class="cfg" id="cfg">
+      <label><input type="checkbox" id="vOn" checked> Leer en voz alta</label>
+      <label>Voz <select id="vSel"></select></label>
+      <label>Velocidad <input type="range" id="vRate" min="0.7" max="1.6" step="0.1" value="1.1"></label>
+      <label><input type="checkbox" id="vName" checked> Decir el nombre</label>
+      <label><input type="checkbox" id="vGift" checked> Anunciar regalos</label>
+      <label>Servidor <input type="text" id="srv" placeholder="https://tu-app.onrender.com"></label>
+      <label><input type="checkbox" id="aOn"> Alertas visuales</label>
+      <label><input type="checkbox" id="aSnd"> Sonido de alertas</label>
+      <label><input type="checkbox" id="aFol"> Avisar nuevos seguidores</label>
+      <button class="btn ghost" id="test" style="padding:10px 18px">Probar voz</button>
+      <button class="btn ghost" id="testAlert" style="padding:10px 18px">Probar alerta</button>
+    </div>
+    <div id="status" role="status">Sin conexión</div>
+    <div class="stage"><div id="alerts" aria-live="polite"></div><div id="feed"><p class="empty" id="empty">Escribe tu usuario con el live activo y toca Conectar. Los comentarios aparecerán aquí.</p></div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">UINIK LIVE, una extensión de UINIK para la creación de contenido.</div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
 <script>
@@ -231,6 +264,40 @@ function add(cls, html){
   return d;
 }
 
+// ---------- Alertas ----------
+['aOn','aSnd','aFol'].forEach((id) => { $(id).checked = store.get(id, '1') === '1'; $(id).onchange = () => store.set(id, $(id).checked ? '1' : '0'); });
+let ctx = null;
+function getCtx(){
+  try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); } catch(e){}
+  return ctx;
+}
+function chime(){
+  const c = getCtx(); if (!c) return;
+  [659, 880, 1318].forEach((f, i) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + i * 0.11;
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + 0.55);
+  });
+}
+const aq = []; let aBusy = false;
+function showAlert(a){
+  if (!$('aOn').checked) return;
+  if (aq.length >= 8) aq.shift();
+  aq.push(a); if (!aBusy) nextAlert();
+}
+function nextAlert(){
+  const a = aq.shift(); if (!a) { aBusy = false; return; }
+  aBusy = true;
+  const el = document.createElement('div'); el.className = 'alert';
+  const pic = a.img ? `<img src="${esc(a.img)}" alt="" onerror="this.style.display='none'">` : `<div class="aico">${a.icon || '🎁'}</div>`;
+  el.innerHTML = `${pic}<div><b>${esc(a.title)}</b><span>${esc(a.sub)}</span></div>${a.badge ? `<em>${esc(a.badge)}</em>` : ''}`;
+  $('alerts').appendChild(el);
+  if ($('aSnd').checked) chime();
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); nextAlert(); }, 300); }, 4500);
+}
+$('testAlert').onclick = () => { getCtx(); showAlert({ title: 'Luna_23', sub: 'envió Rosa', badge: 'x3', icon: '🌹' }); };
+
 // ---------- Conexión ----------
 let socket = null;
 function setStatus(msg, ok){ const s = $('status'); s.textContent = msg; s.className = ok ? 'ok' : 'err'; }
@@ -240,7 +307,7 @@ function connect(){
   if (!user) return setStatus('Escribe tu usuario de TikTok.', false);
   if (!srv) { $('cfg').classList.add('open'); return setStatus('Falta la dirección del servidor en Ajustes.', false); }
   store.set('u', user); store.set('srv', srv);
-  speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance('')); getCtx();
 
   if (socket) socket.disconnect();
   setStatus('Conectando…', true);
@@ -257,8 +324,12 @@ function connect(){
   socket.on('gift', (g) => {
     add('event', `<b>${esc(g.name)}</b> envió ${esc(g.gift)} x${esc(g.count)}`);
     if ($('vGift').checked) speak(`${g.name} envió ${g.gift}`, null);
+    showAlert({ title: g.name, sub: `envió ${g.gift}`, badge: g.count > 1 ? `x${g.count}` : '', img: g.img, icon: '🎁' });
   });
-  socket.on('follow', (f) => add('event', `<b>${esc(f.name)}</b> empezó a seguirte`));
+  socket.on('follow', (f) => {
+    add('event', `<b>${esc(f.name)}</b> empezó a seguirte`);
+    if ($('aFol').checked) showAlert({ title: f.name, sub: 'empezó a seguirte', icon: '💖', img: f.avatar });
+  });
 }
 $('go').onclick = connect;
 $('u').addEventListener('keydown', (e) => { if (e.key === 'Enter') connect(); });
