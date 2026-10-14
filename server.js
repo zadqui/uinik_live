@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 const { WebcastPushConnection } = require('tiktok-live-connector');
@@ -6,7 +8,10 @@ const { WebcastPushConnection } = require('tiktok-live-connector');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
-app.use(express.static('public'));
+// Sirve la página desde ./public si existe; si no, desde la raíz (solo estos archivos)
+const root = fs.existsSync(path.join(__dirname, 'public')) ? path.join(__dirname, 'public') : __dirname;
+app.get('/', (req, res) => res.sendFile(path.join(root, 'index.html')));
+['index.html', 'logo.png', 'icon.png'].forEach((f) => app.get('/' + f, (req, res) => res.sendFile(path.join(root, f))));
 
 io.on('connection', (socket) => {
   let tiktok = null;
