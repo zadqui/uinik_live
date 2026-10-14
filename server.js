@@ -11,7 +11,9 @@ const io = new Server(server, { cors: { origin: '*' } });
 // Sirve la página desde ./public si existe; si no, desde la raíz (solo estos archivos)
 const root = fs.existsSync(path.join(__dirname, 'public')) ? path.join(__dirname, 'public') : __dirname;
 app.get('/', (req, res) => res.sendFile(path.join(root, 'index.html')));
-['index.html', 'logo.png', 'icon.png', 'hero.webp'].forEach((f) => app.get('/' + f, (req, res) => res.sendFile(path.join(root, f))));
+['index.html', 'alertas.html', 'logo.png', 'icon.png', 'hero.webp'].forEach((f) => app.get('/' + f, (req, res) => res.sendFile(path.join(root, f))));
+// Imágenes, GIFs y sonidos para las alertas: pon tus archivos en la carpeta media/
+app.use('/media', express.static(path.join(root, 'media')));
 
 io.on('connection', (socket) => {
   let tiktok = null;
@@ -38,7 +40,13 @@ io.on('connection', (socket) => {
     }));
     tiktok.on('gift', (d) => {
       if (d.giftType === 1 && !d.repeatEnd) return; // evita repetir regalos en racha
-      socket.emit('gift', { name: d.nickname, gift: d.giftName, count: d.repeatCount, img: d.giftPictureUrl });
+      socket.emit('gift', {
+        name: d.nickname,
+        gift: d.giftName,
+        count: d.repeatCount,
+        img: d.giftPictureUrl,
+        diamonds: (d.diamondCount || 0) * (d.repeatCount || 1) // monto total en diamantes
+      });
     });
     tiktok.on('member', (d) => socket.emit('join', { name: d.nickname }));
     tiktok.on('follow', (d) => socket.emit('follow', { name: d.nickname, avatar: d.profilePictureUrl }));

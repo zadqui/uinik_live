@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UINIK LIVE · Alertas</title>
+<link rel="icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0e0f14;--soft:#faf6f7;--line:#eee7ea;--muted:#6b6670;--coral:#ff1f4b;--grad:linear-gradient(135deg,#ff1f6b,#ff8a00)}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Bricolage Grotesque',system-ui,sans-serif;color:var(--ink);background:#fff}
+/* ---------- Alertas (editor y fuente de navegador comparten estilos) ---------- */
+#stage{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;pointer-events:none}
+#stage.top{top:0}#stage.center{top:50%;transform:translateY(-50%)}#stage.bottom{bottom:0}
+.alert{display:flex;align-items:center;gap:var(--gap,18px);max-width:100%;animation:in .45s cubic-bezier(.2,.9,.3,1.15)}
+.alert.card{background:linear-gradient(135deg,var(--bg),var(--bg2));color:var(--tx);border-radius:22px;padding:16px 26px;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.alert.clean{color:var(--tx);text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.5)}
+.alert.vertical{flex-direction:column;text-align:center}
+.alert img{height:var(--isz);max-width:var(--isz);width:auto;object-fit:contain;flex:none}
+.alert .l1{font-size:var(--fs);font-weight:800;line-height:1.1;overflow-wrap:anywhere}
+.alert .l2{font-size:calc(var(--fs)*.7);font-weight:600;opacity:.96;margin-top:4px;overflow-wrap:anywhere}
+.alert.out{opacity:0;transform:translateY(-14px);transition:.4s}
+@keyframes in{from{opacity:0;transform:translateY(-22px) scale(.94)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.alert{animation:none}}
+/* ---------- Modo OBS ---------- */
+body.ov{background:transparent;overflow:hidden;height:100vh}
+body.ov #editor{display:none}
+body.ov #stage{position:fixed}
+/* ---------- Editor ---------- */
+#editor{display:grid;grid-template-columns:minmax(320px,440px) 1fr;min-height:100vh}
+#form{padding:24px;border-right:1.5px solid var(--line);overflow-y:auto;max-height:100vh}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em} h1 span{color:var(--coral)}
+.sub{color:var(--muted);font-size:14px;margin:4px 0 18px}
+fieldset{border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px;display:grid;gap:10px}
+legend{font-weight:800;padding:0 6px}
+label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+label.row{display:flex;align-items:center;gap:8px}
+input[type=text],input[type=number],select{font:inherit;color:var(--ink);padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;width:100%;background:#fff}
+input[type=color]{width:100%;height:38px;border:1.5px solid var(--line);border-radius:10px;padding:2px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+small{color:var(--muted);font-size:12px;line-height:1.35}
+.btn{font:inherit;font-weight:600;border:0;border-radius:12px;padding:11px 18px;cursor:pointer;background:var(--ink);color:#fff}
+.btn.grad{background:var(--grad)} .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+:focus-visible{outline:3px solid #7a1cff;outline-offset:2px}
+#side{position:relative;display:flex;flex-direction:column;min-width:0}
+#preview{position:relative;flex:1;min-height:360px;overflow:hidden;background:conic-gradient(#e9e4e6 25%,#f7f3f4 0 50%,#e9e4e6 0 75%,#f7f3f4 0) 0 0/28px 28px}
+#bar{padding:16px 20px;border-top:1.5px solid var(--line);display:grid;gap:10px}
+#bar .acts{display:flex;flex-wrap:wrap;gap:8px}
+#link{font-size:12px}
+@media (max-width:900px){#editor{grid-template-columns:1fr}#form{max-height:none;border-right:0}}
+</style>
+</head>
+<body>
+
+<div id="editor">
+  <form id="form" onsubmit="return false">
+    <h1>Alertas <span>LIVE</span></h1>
+    <p class="sub">Diseña tus alertas, copia el enlace y pégalo en OBS como fuente de navegador.</p>
+
+    <fieldset><legend>Conexión</legend>
+      <label>Usuario de TikTok<input type="text" data-k="user" placeholder="@tu_usuario"></label>
+      <label>Servidor<input type="text" data-k="srv" placeholder="https://tu-app.onrender.com"></label>
+    </fieldset>
+
+    <fieldset><legend>Regalos</legend>
+      <label class="row"><input type="checkbox" data-k="gift.on"> Mostrar alertas de regalos</label>
+      <label>Línea 1<input type="text" data-k="gift.l1"></label>
+      <label>Línea 2<input type="text" data-k="gift.l2"></label>
+      <small>Variables: {name} {gift} {count} {monto}. Si no pones imagen, se usa la del regalo.</small>
+      <label>Imagen o GIF (enlace)<input type="text" data-k="gift.img" placeholder="https://… o media/gracias.gif"></label>
+      <label>Sonido (enlace)<input type="text" data-k="gift.snd" placeholder="https://… o media/gracias.mp3"></label>
+    </fieldset>
+
+    <fieldset><legend>Regalo grande</legend>
+      <label class="row"><input type="checkbox" data-k="big.on"> Usar otra alerta si el monto es alto</label>
+      <label>Monto mínimo (diamantes)<input type="number" min="1" data-k="big.min"></label>
+      <label>Línea 1<input type="text" data-k="big.l1"></label>
+      <label>Línea 2<input type="text" data-k="big.l2"></label>
+      <label>Imagen o GIF (enlace)<input type="text" data-k="big.img"></label>
+      <label>Sonido (enlace)<input type="text" data-k="big.snd"></label>
+    </fieldset>
+
+    <fieldset><legend>Nuevo seguidor</legend>
+      <label class="row"><input type="checkbox" data-k="fol.on"> Mostrar alertas de seguidores</label>
+      <label>Línea 1<input type="text" data-k="fol.l1"></label>
+      <label>Línea 2<input type="text" data-k="fol.l2"></label>
+      <label>Imagen o GIF (enlace)<input type="text" data-k="fol.img"></label>
+      <label>Sonido (enlace)<input type="text" data-k="fol.snd"></label>
+    </fieldset>
+
+    <fieldset><legend>Apariencia</legend>
+      <div class="two">
+        <label>Estilo<select data-k="style"><option value="card">Tarjeta</option><option value="clean">Solo texto</option></select></label>
+        <label>Posición<select data-k="pos"><option value="top">Arriba</option><option value="center">Centro</option><option value="bottom">Abajo</option></select></label>
+        <label>Disposición<select data-k="layout"><option value="">Imagen al lado</option><option value="vertical">Imagen arriba</option></select></label>
+        <label>Duración (s)<input type="number" min="2" max="30" data-k="dur"></label>
+        <label>Texto (px)<input type="number" min="14" max="96" data-k="fs"></label>
+        <label>Imagen (px)<input type="number" min="32" max="400" data-k="isz"></label>
+        <label>Color de texto<input type="color" data-k="tx"></label>
+        <label>Volumen (0–1)<input type="number" min="0" max="1" step="0.1" data-k="vol"></label>
+        <label>Fondo, inicio<input type="color" data-k="bg"></label>
+        <label>Fondo, fin<input type="color" data-k="bg2"></label>
+      </div>
+    </fieldset>
+  </form>
+
+  <div id="side">
+    <div id="preview"></div>
+    <div id="bar">
+      <div class="acts">
+        <button class="btn ghost" id="tG">Probar regalo</button>
+        <button class="btn ghost" id="tB">Probar regalo grande</button>
+        <button class="btn ghost" id="tF">Probar seguidor</button>
+      </div>
+      <label>Enlace para OBS (Fuentes → Navegador, 1920×1080)
+        <input type="text" id="link" readonly>
+      </label>
+      <div class="acts"><button class="btn grad" id="copy">Copiar enlace</button></div>
+      <small>Los archivos propios (GIF, PNG, MP3) deben tener un enlace público. Si los subes a la carpeta <b>media/</b> del repo, escribe <b>media/archivo.gif</b>.</small>
+    </div>
+  </div>
+</div>
+
+<div id="stage" class="top"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const D = {
+  user:'', srv:'', style:'card', pos:'top', layout:'', dur:6, fs:30, isz:96, vol:0.8,
+  tx:'#ffffff', bg:'#ff1f6b', bg2:'#ff8a00',
+  gift:{on:true, l1:'{name}', l2:'envió {gift} x{count}', img:'', snd:''},
+  big:{on:false, min:100, l1:'¡{name} la rompió!', l2:'{gift} · {monto} 💎', img:'', snd:''},
+  fol:{on:true, l1:'{name}', l2:'empezó a seguirte', img:'', snd:''}
+};
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const enc = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const dec = (s) => { try { return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))); } catch(e){ return null; } };
+const merge = (a, b) => { for (const k in (b||{})) a[k] = (b[k] && typeof b[k]==='object') ? merge(a[k]||{}, b[k]) : b[k]; return a; };
+const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+
+const q = new URLSearchParams(location.search);
+const isOverlay = q.has('o');
+let cfg = merge(clone(D), isOverlay ? dec(q.get('o')) : dec(store.get('uinik_alerts') || '') );
+if (!cfg.srv && /^https?:$/.test(location.protocol)) cfg.srv = location.origin;
+const stage = $('stage');
+
+// ---------- Alertas ----------
+const fill = (t, d) => String(t||'').replace(/\{(\w+)\}/g, (m,k) => d[k] ?? '');
+const queue = []; let busy = false;
+function show(kind, d){ queue.push({kind, d}); if (queue.length > 10) queue.shift(); if (!busy) next(); }
+function next(){
+  const it = queue.shift(); if (!it) { busy = false; return; }
+  busy = true;
+  let s = cfg[it.kind];
+  if (!s.on) return next();
+  if (it.kind === 'gift' && cfg.big.on && Number(it.d.monto) >= Number(cfg.big.min)) s = cfg.big;
+  const el = document.createElement('div');
+  el.className = `alert ${cfg.style} ${cfg.layout}`;
+  el.style.cssText = `--bg:${cfg.bg};--bg2:${cfg.bg2};--tx:${cfg.tx};--fs:${+cfg.fs||30}px;--isz:${+cfg.isz||96}px`;
+  const src = s.img || it.d.img;
+  if (src) { const im = new Image(); im.alt = ''; im.src = src; im.onerror = () => im.remove(); el.appendChild(im); }
+  const box = document.createElement('div');
+  const a = document.createElement('div'); a.className = 'l1'; a.textContent = fill(s.l1, it.d);
+  const b = document.createElement('div'); b.className = 'l2'; b.textContent = fill(s.l2, it.d);
+  box.append(a, b); el.appendChild(box);
+  (isOverlay ? stage : $('preview').firstElementChild || stage).appendChild(el);
+  if (s.snd) { try { const au = new Audio(s.snd); au.volume = Math.min(1, Math.max(0, +cfg.vol)); au.play().catch(()=>{}); } catch(e){} }
+  const ms = Math.max(2, +cfg.dur || 6) * 1000;
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); next(); }, 400); }, ms);
+}
+stage.className = cfg.pos;
+
+// ---------- Modo OBS ----------
+if (isOverlay) {
+  document.body.classList.add('ov');
+  if (cfg.user && cfg.srv) {
+    const socket = io(cfg.srv.replace(/\/$/,''), { transports:['websocket','polling'] });
+    let retry = null;
+    const join = () => socket.emit('connect-live', cfg.user.trim());
+    socket.on('connect', join);
+    socket.on('status', (s) => { if (!s.ok && !retry) retry = setTimeout(() => { retry = null; if (socket.connected) join(); }, 20000); });
+    socket.on('gift', (g) => show('gift', { name:g.name, gift:g.gift, count:g.count, monto:g.diamonds ?? g.value ?? '', img:g.img }));
+    socket.on('follow', (f) => show('fol', { name:f.name, img:f.avatar }));
+  }
+}
+
+// ---------- Editor ----------
+else {
+  const prev = $('preview'); const holder = document.createElement('div');
+  holder.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;pointer-events:none';
+  prev.appendChild(holder); stage.remove();
+  const get = (o, p) => p.split('.').reduce((x,k) => x?.[k], o);
+  const set = (o, p, v) => { const ks = p.split('.'); const l = ks.pop(); ks.reduce((x,k) => x[k], o)[l] = v; };
+  const place = () => { holder.style.justifyContent = {top:'flex-start',center:'center',bottom:'flex-end'}[cfg.pos]; };
+
+  document.querySelectorAll('[data-k]').forEach((i) => {
+    const v = get(cfg, i.dataset.k);
+    if (i.type === 'checkbox') i.checked = !!v; else i.value = v ?? '';
+    i.oninput = i.onchange = () => {
+      set(cfg, i.dataset.k, i.type === 'checkbox' ? i.checked : (i.type === 'number' ? +i.value : i.value));
+      place(); refresh();
+    };
+  });
+  function refresh(){
+    const c = clone(cfg); const url = location.href.split('?')[0].split('#')[0] + '?o=' + enc(c);
+    $('link').value = url; store.set('uinik_alerts', enc(c));
+  }
+  $('copy').onclick = async () => { $('link').select(); try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = 'Enlace copiado'; setTimeout(() => $('copy').textContent = 'Copiar enlace', 1800); } catch(e){} };
+  $('tG').onclick = () => show('gift', { name:'Luna_23', gift:'Rosa', count:3, monto:3, img:'' });
+  $('tB').onclick = () => show('gift', { name:'Luna_23', gift:'León', count:1, monto:Math.max(+cfg.big.min||100, 500), img:'' });
+  $('tF').onclick = () => show('fol', { name:'Luna_23', img:'' });
+  place(); refresh();
+}
+</script>
+</body>
+</html>
